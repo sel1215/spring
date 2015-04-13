@@ -1,0 +1,23 @@
+CREATE TABLE  "EMP_TABLE" 
+   (	"PK_NUM" NUMBER, 
+	"NUM" NUMBER, 
+	"NAME" VARCHAR2(10), 
+	"PHONE" VARCHAR2(15), 
+	"GRADE" VARCHAR2(10), 
+	"EMAIL" VARCHAR2(25), 
+	 CONSTRAINT "EMP_TABLE_PK" PRIMARY KEY ("PK_NUM") ENABLE
+   ) ;
+    
+CREATE SEQUENCE   "EMP_TABLE_SEQ"  MINVALUE 1 MAXVALUE 999999999999999999999999999 INCREMENT BY 1 START WITH 1 NOCACHE  NOORDER  NOCYCLE ;
+    
+INSERT INTO EMP_TABLE (pk_num, num, name, phone, grade, email)
+VALUES (EMP_TABLE_SEQ.NEXTVAL, 1, 'tester', '010-4567-4567', '사원', 'test@test.com')
+
+INSERT INTO EMP_TABLE (pk_num, num, name, phone, grade, email)
+VALUES (EMP_TABLE_SEQ.NEXTVAL, 2, 'lee', '010-789-1234', '사원', 'employee@comtrue.com')
+
+INSERT INTO EMP_TABLE (pk_num, num, name, phone, grade, email)
+VALUES (EMP_TABLE_SEQ.NEXTVAL, 4, 'jo', '010-1111-2222', '대리', 'daeli@test.com')
+
+INSERT INTO EMP_TABLE (pk_num, num, name, phone, grade, email)
+VALUES (EMP_TABLE_SEQ.NEXTVAL, 5, 'zero', '010-7777-8888', '부장', 'bujang@test.com')

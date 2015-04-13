@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="src/main/webapp/resources/mapper/EmpMapper">
+
+<!-- 01.직원 리스트 출력 : 이름 정렬 -->
+  <select id="empList" resultType="employee">
+  	SELECT pk_num, TO_CHAR(num, '000') num, name, phone, grade, email  
+  	FROM EMP_TABLE
+  	ORDER BY name
+  </select>
+
+<!-- 02.직원등록시, 직원번호 불러오기 -->
+<select id="maxNum" resultType="String">
+SELECT TO_CHAR(MAX(num)+1, '000') num
+FROM EMP_TABLE
+</select>
+
+<!-- 03.직원등록 -->
+<insert id="empInsert" parameterType="employee">
+INSERT INTO EMP_TABLE (pk_num, num, name, phone, grade, email)
+VALUES (EMP_TABLE_SEQ.NEXTVAL, TO_NUMBER(#{num}), #{name}, #{phone}, #{grade}, #{email})
+</insert>
+
+<!-- 04.직원검색 : 각 필드별로 검색 -->
+	<select id="empSearch" parameterType="employee" resultType="employee">
+  	SELECT pk_num, TO_CHAR(num, '000') num, name, phone, grade, email
+  	FROM EMP_TABLE
+	  	<choose>
+		  	<when test="num!=''">
+		  	WHERE num = TO_NUMBER(#{num})
+		  	</when>
+		  	<when test="name!=''">
+		  	WHERE name LIKE '%' || #{name} || '%'
+		  	</when>
+		  	<when test="phone!=''">
+		  	WHERE phone LIKE '%' || #{phone} || '%'
+		  	</when>
+		  	<when test="grade!=''">
+		  	WHERE grade LIKE '%' || #{grade} || '%'
+		  	</when>
+		  	<when test="email!=''">
+		  	WHERE email LIKE '%' || #{email} || '%'
+		  	</when>
+		  	<when test="pk_num!=''">
+		  	WHERE pk_num = #{pk_num}
+		  	</when>
+	  	</choose>
+	  	ORDER BY name
+	</select>
+
+<!-- 06.직원번호 중복체크 -->
+<select id="numChk" parameterType="String" resultType="int">
+SELECT COUNT(*) FROM EMP_TABLE
+WHERE num = TO_NUMBER(#{num})
+</select>
+
+<!-- 07.직원정보 수정 -->
+	<update id="empChange" parameterType="employee">
+  	UPDATE EMP_TABLE 
+  	SET num=TO_NUMBER(#{num})
+	  	<if test="name!=''">
+	  	, name=#{name}
+	  	</if>
+	  	<if test="phone!=''">
+	  	, phone=#{phone}
+	  	</if>
+	  	<if test="grade!=''">
+	  	, grade=#{grade}
+	  	</if>
+	  	<if test="email!=''">
+	  	, email=#{email}
+	  	</if>
+  	WHERE pk_num=#{pk_num}
+	</update>
+
+<!-- 08.직원정보 삭제 -->
+	<delete id="empDelete" parameterType="int">
+	DELETE FROM EMP_TABLE
+	WHERE pk_num = #{pk_num}
+	</delete>
+
+<!-- 09.하루에 한 번씩 직원 목록 메일로 발송 -->
+
+</mapper>
